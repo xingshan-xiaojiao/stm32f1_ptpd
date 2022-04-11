@@ -41,7 +41,6 @@ extern UART_HandleTypeDef huart3;
 void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void UART3_SendWave(uint8_t num, uint8_t bytes, ...);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

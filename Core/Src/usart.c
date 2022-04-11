@@ -19,10 +19,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include <stdio.h>
-#include <stdarg.h>
+
 /* USER CODE BEGIN 0 */
-#define CMD_WARE 3
+#include <stdio.h>
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
@@ -84,6 +83,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+    /* USART3 interrupt Init */
+    HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspInit 1 */
 
   /* USER CODE END USART3_MspInit 1 */
@@ -107,6 +109,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10|GPIO_PIN_11);
 
+    /* USART3 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspDeInit 1 */
 
   /* USER CODE END USART3_MspDeInit 1 */
@@ -114,31 +118,11 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-uint8_t cmdf[2] = {CMD_WARE, ~CMD_WARE};
-uint8_t cmdr[2] = {~CMD_WARE, CMD_WARE};
-void UART3_SendWave(uint8_t num, uint8_t bytes, ...)
+int fputc(int c,FILE *f)
 {
-    va_list ap;
-    uint8_t tmp;
-
-    va_start(ap, bytes);
-
-    HAL_UART_Transmit(&huart3,cmdf, sizeof(cmdf),100);
-
-    for (tmp = 0; tmp < num; tmp++)
-    {
-        HAL_UART_Transmit(&huart3,va_arg(ap, uint8_t *), bytes,100);
-    }
-
-    HAL_UART_Transmit(&huart3,cmdr, sizeof(cmdr),100);
-    va_end(ap);
+    uint8_t ch;
+    ch = c;
+    HAL_UART_Transmit_IT(&huart3,&ch,1);
+    return c;
 }
-
-int fputc(int ch, FILE *f)
-{
-	HAL_UART_Transmit(&huart3 , (uint8_t *)&ch, 1, 10);
-	return ch;
-}
-
-
 /* USER CODE END 1 */
