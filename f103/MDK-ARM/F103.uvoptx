@@ -260,7 +260,7 @@
 
   <Group>
     <GroupName>Application/User/Core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -764,7 +764,7 @@
 
   <Group>
     <GroupName>App/ntshell/usr</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -795,13 +795,21 @@
   </Group>
 
   <Group>
+    <GroupName>App/ptpd/lib</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+  </Group>
+
+  <Group>
     <GroupName>Middlewares/FreeRTOS</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>42</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -813,7 +821,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>43</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -825,7 +833,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>44</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -837,7 +845,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>45</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -849,7 +857,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>46</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -861,7 +869,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>47</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -873,7 +881,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>48</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -885,7 +893,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>49</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -897,7 +905,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>50</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -909,7 +917,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>51</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
