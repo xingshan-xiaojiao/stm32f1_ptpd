@@ -15,7 +15,7 @@ A = node()
 B = node()
 C = node()
 
-filename = '0.1.txt'
+filename = 'ptp_py/HILS/0.1.txt'
 file = open(filename, 'r')
 M = 0
 
@@ -80,6 +80,8 @@ axesA[1][1].set_ylabel('时间/s')
 axesA[1][1].set_title('t4(主节点接受时间)')
 plt.suptitle('节点A')
 plt.tight_layout()
+plt.savefig('/ptp_py/HILS/A.png', dpi=400, bbox_inches = 'tight')
+
 
 # 节点B
 figB,axesB = plt.subplots(2,2)
@@ -103,6 +105,7 @@ axesB[1][1].set_ylabel('时间/s')
 axesB[1][1].set_title('t4(主节点接受时间)')
 plt.suptitle('节点B')
 plt.tight_layout()
+plt.savefig('/ptp_py/HILS/B.png', dpi=400, bbox_inches = 'tight')
 
 # 节点B
 figC,axesC = plt.subplots(2,2)
@@ -126,11 +129,7 @@ axesC[1][1].set_ylabel('时间/s')
 axesC[1][1].set_title('t4(主节点接受时间)')
 plt.suptitle('节点C')
 plt.tight_layout()
+plt.savefig('/ptp_py/HILS/C.png', dpi=400, bbox_inches = 'tight')
 
 plt.show()
-
-
-
-
-
 

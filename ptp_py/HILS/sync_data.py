@@ -20,7 +20,7 @@ nodeA = node()
 nodeB = node()
 nodeC = node()
 
-filename = '0.1.txt'
+filename = 'ptp_py/HILS/0.1.txt'
 file = open(filename, 'r')
 M = 0
 
@@ -75,12 +75,6 @@ def node_handle(node_v):
     node_v.offset = np.array(node_v.offset)
 
     fig_v, axes_v = plt.subplots(3,1)
-    if node_v == nodeA:
-        plt.suptitle('节点A')
-    if node_v == nodeB:
-        plt.suptitle('节点B')
-    if node_v == nodeC:
-        plt.suptitle('节点C')
     plt.rcParams['font.sans-serif'] = ['SimHei'] 
     plt.rcParams['axes.unicode_minus'] = False  
     axes_v[0].plot(t, node_v.offset, 'r')
@@ -147,8 +141,18 @@ def node_handle(node_v):
         axes_v[2].set_ylim(0.60e-7,1.3e-7)
     axes_v[2].set_ylabel('时间/s')
     axes_v[2].set_title('时钟偏移量(引入卡尔曼滤波器同步后)')
-
-    plt.tight_layout()
+    if node_v == nodeA:
+        plt.suptitle('节点A')
+        plt.tight_layout()
+        plt.savefig('A_.png', dpi=400, bbox_inches = 'tight')
+    if node_v == nodeB:
+        plt.suptitle('节点B')
+        plt.tight_layout()
+        plt.savefig('B_.png', dpi=400, bbox_inches = 'tight')
+    if node_v == nodeC:
+        plt.suptitle('节点C')
+        plt.tight_layout()
+        plt.savefig('C_.png', dpi=400, bbox_inches = 'tight')
 
 node_handle(nodeA)
 node_handle(nodeB)
