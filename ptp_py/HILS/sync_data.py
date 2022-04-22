@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #coding:utf8
 
+from cmath import nan
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -13,7 +14,41 @@ class node:
         self.delay = []
         self.offset = []
         self.offset_update_ptp = []
-        self.offset_update_kalman = []
+        self.offset_update_pidinc = []
+
+
+class pidAbs:
+    def __init__(self,kp,ki,kd,inc_lim):
+        self.kp = kp
+        self.ki = ki
+        self.kd = kd
+        self.inc_lim = inc_lim
+        
+        self.err_now = 0
+        self.d_ctr_out = 0
+        self.ctr_out = 0
+
+        self.err_old_1 = 0
+        self.err_old_2 = 0
+
+
+    def update(self,target,current):
+        self.err_now = target - current
+        d_err_p = self.err_now - self.err_old_1
+        d_err_i = self.err_now
+        d_err_d = self.err_now - 2 * self.err_old_1 + self.err_old_2
+        self.d_ctr_out = self.kp * d_err_p + self.ki * d_err_i + self.kd * d_err_d
+        self.err_old_2 = self.err_old_1
+        self.err_old_1 = self.err_now  
+        
+        if self.d_ctr_out < -self.inc_lim:
+            self.d_ctr_out = -self.inc_lim
+        if self.d_ctr_out > self.inc_lim:
+            self.d_ctr_out = self.inc_lim
+
+        self.ctr_out += self.d_ctr_out
+
+        return self.ctr_out
 
 
 nodeA = node()
@@ -81,66 +116,26 @@ def node_handle(node_v):
     axes_v[0].set_ylabel('时间/s')
     axes_v[0].set_title('时钟偏移量(未同步)')
 
-    node_v.offset_update_ptp.append(node_v.offset[0]) # 初始时钟偏差
-
-    for i in range(1,M):
-        offset_tmp = node_v.offset[i] - node_v.offset[i-1] # 上一时刻修正当前时刻
+    for i in range(0,M):
+        offset_tmp = node_v.t1[i] - node_v.t2[i] + node_v.offset[i]
         node_v.offset_update_ptp.append(offset_tmp)
 
-    # print(node_v.offset_update_ptp)
     axes_v[1].plot(t, node_v.offset_update_ptp, 'g')
-    axes_v[1].set_xlim(-50,950)
-    if node_v == nodeA:
-        axes_v[1].set_ylim(2.0e-7,4.5e-7)
-    if node_v == nodeB:
-        axes_v[1].set_ylim(-0.5e-7,1.5e-7)
-    if node_v == nodeC:
-        axes_v[1].set_ylim(0.9e-7,2.1e-7)       
+    axes_v[1].set_xlim(-50,950)  
     axes_v[1].set_ylabel('时间/s')
     axes_v[1].set_title('时钟偏移量(同步后)')
 
-    # 卡尔曼滤波器
-    I = np.mat([[1,0],[0,1]])
-    A = np.mat([[1,0.1],[0,1]])
-    B = np.mat([[-1,-0.1],[0,-1]])
-
-    x = np.mat([[0],[0]])
-    u = np.mat([[0],[0]])
-
-    P = [[np.var(np.random.randn(1,M)),0],
-        [0,np.var(np.random.randn(1,M))]]
-    Q = P
-    R = [[np.var(np.random.randn(1,M)),0],
-        [0,np.var(np.random.randn(1,M))]]
-
-    node_offset_k_tmp = []
+    pid = pidAbs(0.2,0.4,0,0.1)
+    out = 0
     for i in range(0,M):
-        x = A * x + B * u
-        P = A * P * A.T + Q
-        K = P * np.linalg.inv(R + P)
-        z_off = node_v.offset[i]
-        z = [[z_off],[0]]
-        x = x + K * (z - x)
-        u = x
-        node_offset_k_tmp.append(x[0,0])
-        P = (I-K) * P    
+        offset_tmp = node_v.t1[i] - node_v.t2[i] + node_v.offset[i] + out
+        out = pid.update(0,offset_tmp)
+        node_v.offset_update_pidinc.append(offset_tmp)
 
-    node_v.offset_update_kalman.append(node_offset_k_tmp[0])
-    for i in range(1,M):
-        offset_tmp = node_offset_k_tmp[i] - node_offset_k_tmp[i-1] # 上一时刻修正当前时刻
-        node_v.offset_update_kalman.append(offset_tmp)
-
-    # print(node_v.offset_update_kalman)
-    axes_v[2].plot(t, node_v.offset_update_kalman, 'b')
+    axes_v[2].plot(t, node_v.offset_update_pidinc, 'b')
     axes_v[2].set_xlim(-50,950)
-    if node_v == nodeA:
-        axes_v[2].set_ylim(1.3e-7,2.7e-7)
-    if node_v == nodeB:
-        axes_v[2].set_ylim(-0.30e-7,1.0e-7)
-    if node_v == nodeC:
-        axes_v[2].set_ylim(0.60e-7,1.3e-7)
     axes_v[2].set_ylabel('时间/s')
-    axes_v[2].set_title('时钟偏移量(引入卡尔曼滤波器同步后)')
+    axes_v[2].set_title('时钟偏移量(引入PID控制器同步后)')
     if node_v == nodeA:
         plt.suptitle('节点A')
         plt.tight_layout()
