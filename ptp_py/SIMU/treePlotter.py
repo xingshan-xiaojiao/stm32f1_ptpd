@@ -48,7 +48,7 @@ def plotTree(myTree, parentPt, nodeTxt):
     plotTree.yOff = plotTree.yOff + 1.0/plotTree.totalD
 
 def createPlot(inTree):
-    fig = plt.figure(1, facecolor='white')
+    fig = plt.figure(facecolor='white')
     fig.clf()
     axprops = dict(xticks=[], yticks=[])
     createPlot.ax1 = plt.subplot(111, frameon=False, **axprops)    #no ticks
@@ -56,6 +56,5 @@ def createPlot(inTree):
     plotTree.totalD = float(getTreeDepth(inTree))
     plotTree.xOff = -0.5/plotTree.totalW; plotTree.yOff = 1.0;
     plotTree(inTree, (0.5,1.0), '')
-    plt.show()
 
 
