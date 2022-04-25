@@ -142,15 +142,12 @@ def node_handle(node_v):
     if node_v == nodeA:
         plt.suptitle('节点A')
         plt.tight_layout()
-        plt.savefig('A_.png', dpi=400, bbox_inches = 'tight')
     if node_v == nodeB:
         plt.suptitle('节点B')
         plt.tight_layout()
-        plt.savefig('B_.png', dpi=400, bbox_inches = 'tight')
     if node_v == nodeC:
         plt.suptitle('节点C')
         plt.tight_layout()
-        plt.savefig('C_.png', dpi=400, bbox_inches = 'tight')
 
 node_handle(nodeA)
 node_handle(nodeB)

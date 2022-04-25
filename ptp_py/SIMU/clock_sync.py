@@ -69,11 +69,11 @@ M = 800
 t = 0
 for i in range(0,M):
     nodeA.t1.append(C1.clockdata(t))
-    t = t + random.random() * 1e-1 + 10
+    t = t + random.random() * 1e-1 + 0
     nodeA.t2.append(C2.clockdata(t))
     t = t + random.random() * 1e-6
     nodeA.t3.append(C2.clockdata(t))
-    t = t + random.random() * 1e-1 + 10
+    t = t + random.random() * 1e-1 + 0
     nodeA.t4.append(C1.clockdata(t))
     t = t + random.random() * 1e-6
 
