@@ -29,8 +29,12 @@ def netshow(net):
     tp.createPlot(net)
     return res
 
-res = netshow(net1)
+res1 = netshow(net1)
+res2 = netshow(net2)
+res3 = netshow(net3)
 
-print(res)
+print(res1)
+print(res2)
+print(res3)
 
 plt.show()    

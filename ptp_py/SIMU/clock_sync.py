@@ -1,9 +1,19 @@
-#!/usr/bin/env python
-#coding:utf8
-
-from cmath import nan
-import matplotlib.pyplot as plt
+from time import time
 import numpy as np
+import matplotlib.pyplot as plt
+import random
+
+
+D = 1e-12
+
+class clock:
+    def __init__(self):
+        self.b = random.random()
+        self.f = 1/random.uniform(32,33) * 1e-6
+        print('b =', self.b, 'f =', self.f)
+    def clockdata(self,t):
+            y = self.b + self.f * t + 1/2 * D * t * t
+            return y
 
 class node:
     def __init__(self):
@@ -15,7 +25,6 @@ class node:
         self.offset = []
         self.offset_update_ptp = []
         self.offset_update_pidinc = []
-
 
 class pidAbs:
     def __init__(self,kp,ki,kd,inc_lim):
@@ -50,52 +59,26 @@ class pidAbs:
 
         return self.ctr_out
 
+C1 = clock()
+C2 = clock()
 
 nodeA = node()
-nodeB = node()
-nodeC = node()
 
-filename = 'ptp_py/HILS/0.1.txt'
-file = open(filename, 'r')
-M = 0
+M = 800
 
-while True:
-    lines = file.readline()
-    M = M + 1
-    if not lines:
-        break
-    t1_tmp,t2_tmp,t3_tmp,t4_tmp = [float(x) for x in lines.split()]
-    if M%3 == 1:
-        nodeA.t1.append(t1_tmp)
-        nodeA.t2.append(t2_tmp)
-        nodeA.t3.append(t3_tmp)
-        nodeA.t4.append(t4_tmp)
-    if M%3 == 2:
-        nodeB.t1.append(t1_tmp)
-        nodeB.t2.append(t2_tmp)
-        nodeB.t3.append(t3_tmp)
-        nodeB.t4.append(t4_tmp)
-    if M%3 == 0:
-        nodeC.t1.append(t1_tmp)
-        nodeC.t2.append(t2_tmp)
-        nodeC.t3.append(t3_tmp)
-        nodeC.t4.append(t4_tmp)
+t = 0
+for i in range(0,M):
+    nodeA.t1.append(C1.clockdata(t))
+    t = t + random.random() * 1e-1 + 10
+    nodeA.t2.append(C2.clockdata(t))
+    t = t + random.random() * 1e-6
+    nodeA.t3.append(C2.clockdata(t))
+    t = t + random.random() * 1e-1 + 10
+    nodeA.t4.append(C1.clockdata(t))
+    t = t + random.random() * 1e-6
 
-nodeA.t1 = np.array(nodeA.t1)
-nodeA.t2 = np.array(nodeA.t2)
-nodeA.t3 = np.array(nodeA.t3)
-nodeA.t4 = np.array(nodeA.t4)
-
-nodeB.t1 = np.array(nodeB.t1)
-nodeB.t2 = np.array(nodeB.t2)
-nodeB.t3 = np.array(nodeB.t3)
-nodeB.t4 = np.array(nodeB.t4)
-
-nodeC.t1 = np.array(nodeC.t1)
-nodeC.t2 = np.array(nodeC.t2)
-nodeC.t3 = np.array(nodeC.t3)
-nodeC.t4 = np.array(nodeC.t4)
-
+t = np.arange(0,M)
+plt.plot(t, nodeA.t1)
 
 def node_handle(node_v):
     M = len(node_v.t1)
@@ -112,10 +95,9 @@ def node_handle(node_v):
     fig_v, axes_v = plt.subplots(4,1)
     plt.rcParams['font.sans-serif'] = ['SimHei'] 
     plt.rcParams['axes.unicode_minus'] = False  
-
     axes_v[0].plot(t, node_v.delay, 'r')
     axes_v[0].set_ylabel('时间/s')
-    axes_v[0].set_title('链路延时量')   
+    axes_v[0].set_title('链路延时量')
 
     axes_v[1].plot(t, node_v.offset, 'g')
     axes_v[1].set_ylabel('时间/s')
@@ -136,24 +118,15 @@ def node_handle(node_v):
         out = pid.update(0,offset_tmp)
         node_v.offset_update_pidinc.append(offset_tmp)
 
+    print(node_v.offset_update_pidinc)
     axes_v[3].plot(t, node_v.offset_update_pidinc, 'y')
     axes_v[3].set_ylabel('时间/s')
+    axes_v[3].set_ylim(-3.0e-9,2.0e-9)  
     axes_v[3].set_title('时钟偏移量(引入PID控制器同步后)')
-    if node_v == nodeA:
-        plt.suptitle('节点A')
-        plt.tight_layout()
-        plt.savefig('A_.png', dpi=400, bbox_inches = 'tight')
-    if node_v == nodeB:
-        plt.suptitle('节点B')
-        plt.tight_layout()
-        plt.savefig('B_.png', dpi=400, bbox_inches = 'tight')
-    if node_v == nodeC:
-        plt.suptitle('节点C')
-        plt.tight_layout()
-        plt.savefig('C_.png', dpi=400, bbox_inches = 'tight')
+
+    plt.tight_layout()
+
 
 node_handle(nodeA)
-node_handle(nodeB)
-node_handle(nodeC)
-
 plt.show()
+
