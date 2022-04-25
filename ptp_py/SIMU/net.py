@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from platform import node
-import string
 import numpy as np
 import matplotlib.pyplot as plt
 import treePlotter as tp 
@@ -30,7 +29,7 @@ def netshow(net):
     tp.createPlot(net)
     return res
 
-res = netshow(net2)
+res = netshow(net1)
 
 print(res)
 

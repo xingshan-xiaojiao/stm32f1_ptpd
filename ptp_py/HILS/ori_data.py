@@ -80,7 +80,7 @@ axesA[1][1].set_ylabel('时间/s')
 axesA[1][1].set_title('t4(主节点接受时间)')
 plt.suptitle('节点A')
 plt.tight_layout()
-plt.savefig('/ptp_py/HILS/A.png', dpi=400, bbox_inches = 'tight')
+plt.savefig('A.png', dpi=400, bbox_inches = 'tight')
 
 
 # 节点B
@@ -105,7 +105,7 @@ axesB[1][1].set_ylabel('时间/s')
 axesB[1][1].set_title('t4(主节点接受时间)')
 plt.suptitle('节点B')
 plt.tight_layout()
-plt.savefig('/ptp_py/HILS/B.png', dpi=400, bbox_inches = 'tight')
+plt.savefig('B.png', dpi=400, bbox_inches = 'tight')
 
 # 节点B
 figC,axesC = plt.subplots(2,2)
@@ -129,7 +129,7 @@ axesC[1][1].set_ylabel('时间/s')
 axesC[1][1].set_title('t4(主节点接受时间)')
 plt.suptitle('节点C')
 plt.tight_layout()
-plt.savefig('/ptp_py/HILS/C.png', dpi=400, bbox_inches = 'tight')
+plt.savefig('C.png', dpi=400, bbox_inches = 'tight')
 
 plt.show()
 
