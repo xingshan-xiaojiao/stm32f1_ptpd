@@ -9,7 +9,7 @@ D = 1e-12
 class clock:
     def __init__(self):
         self.b = random.random()
-        self.f = 1/random.uniform(32,33) * 1e-6
+        self.f = 1/random.uniform(31,33) * 1e-6
         print('b =', self.b, 'f =', self.f)
     def clockdata(self,t):
             y = self.b + self.f * t + 1/2 * D * t * t
@@ -69,11 +69,11 @@ M = 800
 t = 0
 for i in range(0,M):
     nodeA.t1.append(C1.clockdata(t))
-    t = t + random.random() * 1e-1 + 0
+    t = t + random.random() * 1e-1 + 0.05 + i/50.0
     nodeA.t2.append(C2.clockdata(t))
     t = t + random.random() * 1e-6
     nodeA.t3.append(C2.clockdata(t))
-    t = t + random.random() * 1e-1 + 0
+    t = t + random.random() * 1e-1 + 0.05 + i/50.0
     nodeA.t4.append(C1.clockdata(t))
     t = t + random.random() * 1e-6
 
@@ -111,17 +111,15 @@ def node_handle(node_v):
     axes_v[2].set_ylabel('时间/s')
     axes_v[2].set_title('时钟偏移量(同步后)')
 
-    pid = pidAbs(0.2,0.4,0,0.1)
+    pid = pidAbs(0.3,1.2,0,0.1)
     out = 0
     for i in range(0,M):
         offset_tmp = node_v.t1[i] - node_v.t2[i] + node_v.offset[i] + out
         out = pid.update(0,offset_tmp)
         node_v.offset_update_pidinc.append(offset_tmp)
 
-    print(node_v.offset_update_pidinc)
     axes_v[3].plot(t, node_v.offset_update_pidinc, 'y')
-    axes_v[3].set_ylabel('时间/s')
-    axes_v[3].set_ylim(-3.0e-9,2.0e-9)  
+    axes_v[3].set_ylabel('时间/s') 
     axes_v[3].set_title('时钟偏移量(引入PID控制器同步后)')
 
     plt.tight_layout()
