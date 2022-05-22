@@ -1,4 +1,3 @@
-from time import time
 import numpy as np
 import matplotlib.pyplot as plt
 import random
@@ -77,8 +76,7 @@ for i in range(0,M):
     nodeA.t4.append(C1.clockdata(t))
     t = t + random.random() * 1e-6
 
-t = np.arange(0,M)
-plt.plot(t, nodeA.t1)
+t = np.arange(0,M)  
 
 def node_handle(node_v):
     M = len(node_v.t1)
@@ -103,22 +101,29 @@ def node_handle(node_v):
     axes_v[1].set_ylabel('时间/s')
     axes_v[1].set_title('时钟偏移量(未同步)')
 
-    for i in range(0,M):
-        offset_tmp = node_v.t1[i] - node_v.t2[i] + node_v.offset[i]
+    node_v.offset_update_ptp.append(node_v.offset[0])
+    for i in range(1,M):
+        offset_tmp = node_v.t2[i] - node_v.t1[i] - node_v.delay[i] - node_v.offset[i-1]
+        print(offset_tmp)
         node_v.offset_update_ptp.append(offset_tmp)
 
     axes_v[2].plot(t, node_v.offset_update_ptp, 'b')
+    axes_v[2].set_ylim(-0.5e-8,2.5e-8)
     axes_v[2].set_ylabel('时间/s')
     axes_v[2].set_title('时钟偏移量(同步后)')
 
-    pid = pidAbs(0.3,1.2,0,0.1)
+    pid = pidAbs(0.3,0.1,0,0.1)
+    pid = pidAbs(0.3,0.6,0,0.1)
     out = 0
-    for i in range(0,M):
-        offset_tmp = node_v.t1[i] - node_v.t2[i] + node_v.offset[i] + out
+    node_v.offset_update_pidinc.append(node_v.offset[0])
+    for i in range(1,M):
+        offset_tmp = node_v.t2[i] - node_v.t1[i] - node_v.delay[i] - node_v.offset[i-1] + out
         out = pid.update(0,offset_tmp)
+        # print(offset_tmp)
         node_v.offset_update_pidinc.append(offset_tmp)
 
     axes_v[3].plot(t, node_v.offset_update_pidinc, 'y')
+    axes_v[3].set_ylim(-5e-9,5e-9)
     axes_v[3].set_ylabel('时间/s') 
     axes_v[3].set_title('时钟偏移量(引入PID控制器同步后)')
 
